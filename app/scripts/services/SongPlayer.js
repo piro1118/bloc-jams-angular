@@ -25,6 +25,15 @@
          };
 
          /**
+         * @function stopSong
+         * @desc Stops the current Buzz object and sets the property to null
+         */
+         var stopSong = function(song){
+             currentBuzzObject.stop();
+             SongPlayer.currentSong.playing = null;
+         };
+
+         /**
          * @function getSongIndex
          * @desc index of the song playing
          * @param {Object} song
@@ -32,12 +41,6 @@
          var getSongIndex = function(song) {
              return currentAlbum.songs.indexOf(song);
          };
-
-         /**
-         * @desc Active song object from list of songs
-         * @type {Object}
-         */
-         SongPlayer.currentSong = null;
 
          /**
          * @function setSong
@@ -57,6 +60,12 @@
 
             SongPlayer.currentSong = song;
          };
+
+         /**
+         * @desc Active song object from list of songs
+         * @type {Object}
+         */
+         SongPlayer.currentSong = null;
 
          /**
          * @function play
@@ -95,8 +104,7 @@
              currentSongIndex--;
 
              if (currentSongIndex < 0) {
-                 currentBuzzObject.stop();
-                 SongPlayer.currentSong.playing = null;
+                stopSong(song);
              } else {
                  var song = currentAlbum.songs[currentSongIndex];
                  setSong(song);
@@ -104,6 +112,24 @@
              }
          };
 
+         /**
+         * @function next
+         * @desc plays next song
+         */
+         SongPlayer.next = function() {
+             var currentSongIndex = getSongIndex(SongPlayer.currentSong);
+             currentSongIndex++;
+
+             var lastSongIndex = currentAlbum.songs.length-1;
+
+             if (currentSongIndex > lastSongIndex){
+                 stopSong(song);
+             } else {
+                 var song = currentAlbum.songs[currentSongIndex];
+                 setSong(song);
+                 playSong(song);
+             }
+         };
 
          return SongPlayer;
     }
